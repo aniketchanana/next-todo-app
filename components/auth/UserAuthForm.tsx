@@ -1,0 +1,200 @@
+import {
+  AuthType,
+  OnUserLoginAction,
+  OnUserSignUpAction,
+  UserLogin,
+  UserLoginValidation,
+  UserSignUp,
+  UserSignUpValidation,
+} from "@/types/common";
+import {
+  Box,
+  Button,
+  HStack,
+  Heading,
+  Input,
+  VStack,
+  useToast,
+} from "@chakra-ui/react";
+import { Formik } from "formik";
+import { AuthInput } from "./AuthInput";
+import { validateLogin, validateSignUp } from "@/utils/auth.utils";
+import Link from "next/link";
+import { authRoutes, mainRoutes } from "@/constants/routes";
+import { useRouter } from "next/router";
+
+interface IUserAuthForm {
+  authType: AuthType;
+  userAction: OnUserLoginAction | OnUserSignUpAction;
+}
+
+export const UserAuthForm: React.FC<IUserAuthForm> = ({
+  authType,
+  userAction,
+}) => {
+  const toast = useToast();
+  const router = useRouter();
+  const validateForm = {
+    [AuthType.LOGIN]: validateLogin,
+    [AuthType.SIGNUP]: validateSignUp,
+  };
+  const initialValues = {
+    [AuthType.LOGIN]: { email: "", password: "" },
+    [AuthType.SIGNUP]: {
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  };
+
+  const getFields = ({ handleBlur, handleChange, errors, touched }) => {
+    if (authType === AuthType.LOGIN) {
+      return (
+        <>
+          <AuthInput
+            name="email"
+            type="email"
+            placeholder="aniket.chanana@velotio.com"
+            handleBlur={handleBlur}
+            handleChange={handleChange}
+            errorMessage={
+              (errors["email"] && touched["email"] && errors["email"]) || ""
+            }
+          />
+          <AuthInput
+            name="password"
+            type="password"
+            placeholder="* * * *"
+            handleBlur={handleBlur}
+            handleChange={handleChange}
+            errorMessage={
+              (errors["password"] &&
+                touched["password"] &&
+                errors["password"]) ||
+              ""
+            }
+          />
+        </>
+      );
+    }
+
+    return (
+      <>
+        <AuthInput
+          name="name"
+          type="text"
+          placeholder="aniket"
+          handleBlur={handleBlur}
+          handleChange={handleChange}
+          errorMessage={
+            (errors["name"] && touched["name"] && errors["name"]) || ""
+          }
+        />
+        <AuthInput
+          name="email"
+          type="email"
+          placeholder="aniket.chanana@velotio.com"
+          handleBlur={handleBlur}
+          handleChange={handleChange}
+          errorMessage={
+            (errors["email"] && touched["email"] && errors["email"]) || ""
+          }
+        />
+        <AuthInput
+          name="password"
+          type="password"
+          placeholder="* * * *"
+          handleBlur={handleBlur}
+          handleChange={handleChange}
+          errorMessage={
+            (errors["password"] && touched["password"] && errors["password"]) ||
+            ""
+          }
+        />
+        <AuthInput
+          name="confirmPassword"
+          type="password"
+          placeholder="* * * *"
+          handleBlur={handleBlur}
+          handleChange={handleChange}
+          errorMessage={
+            (errors["confirmPassword"] &&
+              touched["confirmPassword"] &&
+              errors["confirmPassword"]) ||
+            ""
+          }
+        />
+      </>
+    );
+  };
+  const onFormSubmit = async (
+    values: UserLogin | UserSignUp,
+    { setSubmitting }
+  ) => {
+    try {
+      await userAction({ ...values } as any);
+      router.push(mainRoutes.root());
+    } catch {
+      toast({
+        title: "Something went wrong",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+  return (
+    <VStack w={"full"} h="full" alignItems={"center"} justifyContent={"center"}>
+      <Box w="30%">
+        <Heading mb={6}>
+          {authType === AuthType.LOGIN ? "Welcome back!" : "Enter your details"}
+        </Heading>
+        <Formik
+          initialValues={initialValues[authType]}
+          validate={
+            validateForm[authType] as UserLoginValidation | UserSignUpValidation
+          }
+          onSubmit={onFormSubmit}
+        >
+          {({ handleSubmit, isSubmitting, ...rest }) => {
+            return (
+              <form onSubmit={handleSubmit}>
+                <VStack alignItems={"flex-start"}>
+                  {getFields({ ...rest })}
+                  <HStack
+                    justifyContent={"space-between"}
+                    w="full"
+                    alignItems={"center"}
+                  >
+                    <Button
+                      type="submit"
+                      isLoading={isSubmitting}
+                      variant={"solid"}
+                      colorScheme="teal"
+                    >
+                      {authType === AuthType.LOGIN ? "Login" : "Signup"}
+                    </Button>
+                    <Link
+                      href={
+                        authType === AuthType.SIGNUP
+                          ? authRoutes.login()
+                          : authRoutes.signup()
+                      }
+                    >
+                      <Button variant={"link"}>
+                        {authType === AuthType.LOGIN ? "SignUp" : "LogIn"}
+                      </Button>
+                    </Link>
+                  </HStack>
+                </VStack>
+              </form>
+            );
+          }}
+        </Formik>
+      </Box>
+    </VStack>
+  );
+};
