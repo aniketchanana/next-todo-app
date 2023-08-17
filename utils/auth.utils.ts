@@ -59,11 +59,9 @@ export const checkIfUserLoggedInInternalPage = async (
 ) => {
   const cookies = nookies.get(ctx);
   const token = cookies.token;
-  console.log(token);
   try {
     const userDetails = await getUserDetails(token);
     if (token && !isEmpty(userDetails)) {
-      console.log("Done proper authentication");
       return {
         props: {
           userDetails,
