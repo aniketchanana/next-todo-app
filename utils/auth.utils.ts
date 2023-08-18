@@ -5,6 +5,7 @@ import { isEmpty } from "lodash";
 import { authRoutes, mainRoutes } from "@/constants/routes";
 import nookies from "nookies";
 import { GetServerSidePropsContext } from "next";
+import { getUserDetails } from "@/api/auth.apiCalls";
 
 export const validateLogin = (values: UserLogin) => {
   const errors: any = {};
@@ -44,14 +45,6 @@ export const validateSignUp = (values: UserSignUp) => {
   }
 
   return errors;
-};
-
-export const getUserDetails = async (token: string) => {
-  const response = await getApi<IUserDetails>(authEndPoints.isValidSession, {
-    token,
-  });
-
-  return response.data;
 };
 
 export const checkIfUserLoggedInInternalPage = async (

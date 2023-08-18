@@ -1,24 +1,12 @@
+import { fetchAllTodoItems } from "@/api/todo.apisCalls";
 import { LeftSidebar } from "@/components/todo/LeftSidebar";
-import { todoEndpoints } from "@/constants/endPoints";
 import { mainRoutes } from "@/constants/routes";
-import { IFetchTodoListItems, ITodoItem } from "@/types/todo.types";
-import { getApi } from "@/utils/api.utils";
+import { ITodoItem } from "@/types/todo.types";
 import { checkIfUserLoggedInInternalPage } from "@/utils/auth.utils";
 import { Box, Grid, GridItem } from "@chakra-ui/react";
 import { cloneDeep, get, merge } from "lodash";
 import { GetServerSidePropsContext, NextPage } from "next";
 
-const fetchAllTodoItems = async (listId: string, token: string) => {
-  try {
-    const res = await getApi<IFetchTodoListItems>(
-      `${todoEndpoints.getUserTodoItem}?listId=${listId}`,
-      { token }
-    );
-    return res.data;
-  } catch (e) {
-    throw e;
-  }
-};
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const userParams = await checkIfUserLoggedInInternalPage(ctx);
   const listId = get(ctx, "params.todoListId", "") as string;

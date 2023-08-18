@@ -1,30 +1,9 @@
+import { signUpUser } from "@/api/auth.apiCalls";
 import { UserAuthForm } from "@/components/auth/UserAuthForm";
-import { authEndPoints } from "@/constants/endPoints";
-import {
-  AuthType,
-  IUserDetails,
-  OnUserSignUpAction,
-  UserSignUp,
-} from "@/types/user.types";
-import { postApi } from "@/utils/api.utils";
+import { AuthType } from "@/types/user.types";
 
 const Login = () => {
-  const onSignUpButtonClick: OnUserSignUpAction = async ({
-    email,
-    password,
-    name,
-  }: UserSignUp) => {
-    await postApi<IUserDetails>(authEndPoints.signUp, {
-      userDetails: {
-        emailId: email,
-        password,
-        name,
-      },
-    });
-  };
-  return (
-    <UserAuthForm authType={AuthType.SIGNUP} userAction={onSignUpButtonClick} />
-  );
+  return <UserAuthForm authType={AuthType.SIGNUP} userAction={signUpUser} />;
 };
 
 export default Login;

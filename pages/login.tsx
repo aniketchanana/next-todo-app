@@ -1,12 +1,6 @@
+import { LoginUser } from "@/api/auth.apiCalls";
 import { UserAuthForm } from "@/components/auth/UserAuthForm";
-import { authEndPoints } from "@/constants/endPoints";
-import {
-  AuthType,
-  IUserDetails,
-  OnUserLoginAction,
-  UserLogin,
-} from "@/types/user.types";
-import { postApi } from "@/utils/api.utils";
+import { AuthType } from "@/types/user.types";
 import { checkIfUserLoggedInAuthPage } from "@/utils/auth.utils";
 import { GetServerSidePropsContext } from "next/types";
 
@@ -15,18 +9,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 };
 
 const Login = () => {
-  const onLoginButtonClick: OnUserLoginAction = async ({
-    email,
-    password,
-  }: UserLogin) => {
-    await postApi<IUserDetails>(authEndPoints.signIn, {
-      emailId: email,
-      password,
-    });
-  };
-  return (
-    <UserAuthForm authType={AuthType.LOGIN} userAction={onLoginButtonClick} />
-  );
+  return <UserAuthForm authType={AuthType.LOGIN} userAction={LoginUser} />;
 };
 
 export default Login;

@@ -4,4 +4,6 @@ import { FC } from "react";
 interface ITodoListView {
   allList: ITodoItem[];
 }
-export const TodoListView: FC<ITodoListView> = ({ allList }) => {};
+export const TodoListView: FC<ITodoListView> = ({ allList }) => {
+  return <div></div>;
+};

@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "../common/Button";
 import { AddLineIcon } from "../common/Icons";
 import {
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -13,13 +12,11 @@ import {
 } from "@chakra-ui/react";
 import { Formik } from "formik";
 import { FormInput } from "../common/FormInput";
-import { postApi } from "@/utils/api.utils";
-import { ICreateListResponse } from "@/types/todo.types";
-import { todoEndpoints } from "@/constants/endPoints";
 import { useCustomToast } from "@/customHooks/useCustomToast";
 import { useRouter } from "next/router";
 import { get } from "lodash";
 import { todoRoutes } from "@/constants/routes";
+import { createTodoList } from "@/api/todo.apisCalls";
 enum FormItemName {
   TODO_LIST_NAME = "todoListName",
 }
@@ -46,13 +43,7 @@ export const AddNewTodoListButton = () => {
     { setSubmitting }
   ) => {
     try {
-      const response = await postApi<ICreateListResponse>(
-        todoEndpoints.createNewList,
-        {
-          listName: values.todoListName.trim(),
-        }
-      );
-
+      const response = await createTodoList(values.todoListName.trim());
       const newListId = get(response, "data.data.listDetails.uuid", "");
       toast({
         title: "Successfully created todo list",
