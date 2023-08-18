@@ -1,5 +1,7 @@
 export enum TodoActions {
-  SET_TODO_LIST = "SET_TODO_LIST",
+  SET_TODO_LISTS = "SET_TODO_LISTS",
+  SET_TODO_LISTS_LOADING = "SET_TODO_LISTS_LOADING",
+  ADD_NEW_LIST = "ADD_NEW_LIST",
 }
 
 export interface TodoActionType {
@@ -7,7 +9,7 @@ export interface TodoActionType {
   type: TodoActions;
 }
 
-export interface ITodoItem {
+export interface ITodoList {
   uuid: string;
   isDeleted: boolean;
   name: string;
@@ -16,9 +18,10 @@ export interface ITodoItem {
   createdAt: Date;
 }
 
+export interface ITodoItem {}
 export interface ITodoStateContext {
-  todoItems: Array<ITodoItem>;
-  selectedTodoList: string;
+  allTodoLists: ITodoList[];
+  isAllTodoListLoading: boolean;
 }
 
 export type ITodoDispatchContext = (action: TodoActionType) => void;
@@ -28,11 +31,11 @@ export interface ITodoContextProvider {
 }
 
 export interface ICreateListResponse {
-  data: { listDetails: ITodoItem };
+  data: { listDetails: ITodoList };
 }
 
 export interface IFetchTodoListResponse {
-  data: { allList: ITodoItem[] };
+  data: { allList: ITodoList[] };
 }
 
 export interface IFetchTodoListItems {

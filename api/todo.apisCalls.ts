@@ -8,7 +8,7 @@ import {
 import { getApi, postApi } from "@/utils/api.utils";
 
 export const fetchTodoList = async (
-  token,
+  token?: string,
   pageNumber?: number,
   pageSize?: number
 ) => {

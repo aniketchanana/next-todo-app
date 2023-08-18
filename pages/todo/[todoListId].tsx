@@ -1,7 +1,8 @@
-import { fetchAllTodoItems } from "@/api/todo.apisCalls";
+import { fetchAllTodoItems, fetchTodoList } from "@/api/todo.apisCalls";
 import { LeftSidebar } from "@/components/todo/LeftSidebar";
 import { mainRoutes } from "@/constants/routes";
-import { ITodoItem } from "@/types/todo.types";
+import { TodoProvider } from "@/context/TodoContext";
+import { ITodoItem, ITodoList } from "@/types/todo.types";
 import { checkIfUserLoggedInInternalPage } from "@/utils/auth.utils";
 import { Box, Grid, GridItem } from "@chakra-ui/react";
 import { cloneDeep, get, merge } from "lodash";
@@ -13,10 +14,11 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   if (userParams.props?.isAuthenticated) {
     try {
       const response = await fetchAllTodoItems(listId, userParams.props.token);
-      const allTodo = get(response, "data.data.allTodo", []);
+      const selectedTodoListItems = get(response, "data.data.allTodo", []);
+
       return merge(userParams, {
         props: {
-          todoItems: allTodo,
+          selectedTodoListItems,
         },
       });
     } catch (e) {
@@ -34,21 +36,27 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     },
   });
 };
-interface ITodoList {
-  todoItems: ITodoItem[];
+interface ITodoListProps {
+  selectedTodoListItems: ITodoItem[];
+  allTodoList: ITodoList[];
 }
-const TodoList: NextPage<ITodoList> = ({ todoItems }) => {
+const TodoList: NextPage<ITodoListProps> = ({
+  allTodoList,
+  selectedTodoListItems,
+}) => {
   return (
-    <Box width={"full"} h={"full"}>
-      <Grid h="full" templateColumns="1fr 4fr">
-        <GridItem>
-          <LeftSidebar />
-        </GridItem>
-        <GridItem>
-          <Box w="full" h="full" background={"red"} />
-        </GridItem>
-      </Grid>
-    </Box>
+    <TodoProvider>
+      <Box width={"full"} h={"full"}>
+        <Grid h="full" templateColumns="1fr 4fr">
+          <GridItem>
+            <LeftSidebar allTodoList={allTodoList} />
+          </GridItem>
+          <GridItem>
+            <Box w="full" h="full" background={"whitesmoke"} />
+          </GridItem>
+        </Grid>
+      </Box>
+    </TodoProvider>
   );
 };
 
