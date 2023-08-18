@@ -3,6 +3,7 @@ import {
   TodoActionType,
   TodoActions,
 } from "@/types/todo.types";
+import { cloneDeep } from "lodash";
 
 export const todoContextReducer: React.Reducer<
   ITodoStateContext,
@@ -20,6 +21,19 @@ export const todoContextReducer: React.Reducer<
         ...state,
         allTodoLists: [action.payload, ...state.allTodoLists],
       };
+    }
+    case TodoActions.UPDATE_TODO_DETAILS: {
+      const { listId, updatedName } = action.payload;
+      const updatedState = cloneDeep(state);
+      updatedState.allTodoLists = updatedState.allTodoLists.map(
+        (listDetails) => {
+          if (listDetails.uuid === listId) {
+            listDetails.name = updatedName;
+          }
+          return listDetails;
+        }
+      );
+      return updatedState;
     }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);

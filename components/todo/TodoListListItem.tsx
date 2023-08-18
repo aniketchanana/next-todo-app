@@ -1,10 +1,11 @@
 import { ITodoList } from "@/types/todo.types";
 import { Box, HStack } from "@chakra-ui/react";
-import { FC } from "react";
-import { Text } from "@chakra-ui/react";
-import { DeleteLineIcon, PencilLineIcon } from "../common/Icons";
+import { FC, lazy, useState } from "react";
+import { PencilLineIcon } from "../common/Icons";
+import { EditModalView } from "@/constants/common";
+import TodoListAddAndUpdateModal from "./TodoListAddAndUpdateModal";
 
-const ActionIconContainer = ({ children, iconColor }) => {
+const ActionIconContainer = ({ children, iconColor, onClick }) => {
   return (
     <Box
       color={`${iconColor}.300`}
@@ -14,12 +15,18 @@ const ActionIconContainer = ({ children, iconColor }) => {
         color: iconColor,
         transform: "scale(1.2)",
       }}
+      onClick={onClick}
     >
       {children}
     </Box>
   );
 };
-export const TodoListListItem: FC<ITodoList> = ({ name }) => {
+export const TodoListListItem: FC<ITodoList> = ({ name, uuid }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const closeModal = () => setIsModalOpen(false);
+  const openModal = () => setIsModalOpen(true);
+
   return (
     <Box
       px={3}
@@ -38,13 +45,21 @@ export const TodoListListItem: FC<ITodoList> = ({ name }) => {
         {name}
       </Box>
       <HStack gap={1}>
-        <ActionIconContainer iconColor={"teal"}>
+        <ActionIconContainer iconColor={"teal"} onClick={openModal}>
           <PencilLineIcon />
         </ActionIconContainer>
-        <ActionIconContainer iconColor={"red"}>
+        {/* <ActionIconContainer iconColor={"red"}>
           <DeleteLineIcon />
-        </ActionIconContainer>
+        </ActionIconContainer> */}
       </HStack>
+      {isModalOpen && (
+        <TodoListAddAndUpdateModal
+          selectedListId={uuid}
+          isModalOpen={isModalOpen}
+          closeModal={closeModal}
+          viewType={EditModalView.UPDATE}
+        />
+      )}
     </Box>
   );
 };

@@ -12,3 +12,7 @@ export const addNewTodoList = (newTodoList: ITodoList) => ({
   type: TodoActions.ADD_NEW_LIST,
   payload: newTodoList,
 });
+export const updateTodoListAction = (listId: string, updatedName: string) => ({
+  type: TodoActions.UPDATE_TODO_DETAILS,
+  payload: { listId, updatedName },
+});

@@ -26,6 +26,7 @@ export const FormInput: FC<InputProps & IFormInput> = ({
   handleBlur,
   placeholder,
   onInputRefReady = null,
+  ...rest
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
@@ -43,6 +44,7 @@ export const FormInput: FC<InputProps & IFormInput> = ({
         placeholder={placeholder}
         width={"full"}
         ref={inputRef}
+        {...rest}
       />
       {!isEmpty(errorMessage) && <RenderError message={errorMessage} />}
     </>

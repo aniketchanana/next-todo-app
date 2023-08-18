@@ -7,6 +7,7 @@ import { checkIfUserLoggedInInternalPage } from "@/utils/auth.utils";
 import { Box, Grid, GridItem } from "@chakra-ui/react";
 import { cloneDeep, get, merge } from "lodash";
 import { GetServerSidePropsContext, NextPage } from "next";
+import { useRouter } from "next/router";
 
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const userParams = await checkIfUserLoggedInInternalPage(ctx);

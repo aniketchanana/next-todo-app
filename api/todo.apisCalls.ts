@@ -4,8 +4,9 @@ import {
   ICreateListResponse,
   IFetchTodoListItems,
   IFetchTodoListResponse,
+  IUpdateListResponse,
 } from "@/types/todo.types";
-import { getApi, postApi } from "@/utils/api.utils";
+import { getApi, patchApi, postApi } from "@/utils/api.utils";
 
 export const fetchTodoList = async (
   token?: string,
@@ -46,5 +47,13 @@ export const fetchAllTodoItems = async (listId: string, token: string) => {
 export const createTodoList = (listName) => {
   return postApi<ICreateListResponse>(todoEndpoints.createNewList, {
     listName,
+  });
+};
+export const updateTodoList = (listId, updateName) => {
+  return patchApi<IUpdateListResponse>(todoEndpoints.updateTodoList, {
+    listId: listId,
+    updates: {
+      name: updateName,
+    },
   });
 };

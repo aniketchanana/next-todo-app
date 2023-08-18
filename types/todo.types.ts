@@ -2,6 +2,7 @@ export enum TodoActions {
   SET_TODO_LISTS = "SET_TODO_LISTS",
   SET_TODO_LISTS_LOADING = "SET_TODO_LISTS_LOADING",
   ADD_NEW_LIST = "ADD_NEW_LIST",
+  UPDATE_TODO_DETAILS = "UPDATE_TODO_DETAILS",
 }
 
 export interface TodoActionType {
@@ -32,6 +33,9 @@ export interface ITodoContextProvider {
 
 export interface ICreateListResponse {
   data: { listDetails: ITodoList };
+}
+export interface IUpdateListResponse {
+  success: boolean;
 }
 
 export interface IFetchTodoListResponse {
