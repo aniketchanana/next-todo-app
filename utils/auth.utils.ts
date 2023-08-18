@@ -1,6 +1,6 @@
-import { IUserDetails, UserLogin, UserSignUp } from "@/types/common";
+import { IUserDetails, UserLogin, UserSignUp } from "@/types/user.types";
 import { getApi } from "./api.utils";
-import { authApi } from "@/constants/urls";
+import { authEndPoints } from "@/constants/endPoints";
 import { isEmpty } from "lodash";
 import { authRoutes, mainRoutes } from "@/constants/routes";
 import nookies from "nookies";
@@ -47,7 +47,7 @@ export const validateSignUp = (values: UserSignUp) => {
 };
 
 export const getUserDetails = async (token: string) => {
-  const response = await getApi<IUserDetails>(authApi.isValidSession, {
+  const response = await getApi<IUserDetails>(authEndPoints.isValidSession, {
     token,
   });
 
@@ -65,6 +65,8 @@ export const checkIfUserLoggedInInternalPage = async (
       return {
         props: {
           userDetails,
+          isAuthenticated: true,
+          token,
         },
       };
     }

@@ -15,7 +15,7 @@ const breakpoints = {
   xxl: "1600px",
 };
 
-const spacing = {
+export const spacing = {
   space: {
     px: "1px",
     1: "4px",

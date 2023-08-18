@@ -6,22 +6,16 @@ import {
   UserLoginValidation,
   UserSignUp,
   UserSignUpValidation,
-} from "@/types/common";
-import {
-  Box,
-  Button,
-  HStack,
-  Heading,
-  Input,
-  VStack,
-  useToast,
-} from "@chakra-ui/react";
+} from "@/types/user.types";
+import { Box, HStack, Heading, VStack } from "@chakra-ui/react";
 import { Formik } from "formik";
-import { AuthInput } from "./AuthInput";
 import { validateLogin, validateSignUp } from "@/utils/auth.utils";
 import Link from "next/link";
 import { authRoutes, mainRoutes } from "@/constants/routes";
 import { useRouter } from "next/router";
+import { Button } from "../common/Button";
+import { FormInput } from "../common/FormInput";
+import { useCustomToast } from "@/customHooks/useCustomToast";
 
 interface IUserAuthForm {
   authType: AuthType;
@@ -32,7 +26,7 @@ export const UserAuthForm: React.FC<IUserAuthForm> = ({
   authType,
   userAction,
 }) => {
-  const toast = useToast();
+  const toast = useCustomToast();
   const router = useRouter();
   const validateForm = {
     [AuthType.LOGIN]: validateLogin,
@@ -52,7 +46,7 @@ export const UserAuthForm: React.FC<IUserAuthForm> = ({
     if (authType === AuthType.LOGIN) {
       return (
         <>
-          <AuthInput
+          <FormInput
             name="email"
             type="email"
             placeholder="aniket.chanana@velotio.com"
@@ -62,7 +56,7 @@ export const UserAuthForm: React.FC<IUserAuthForm> = ({
               (errors["email"] && touched["email"] && errors["email"]) || ""
             }
           />
-          <AuthInput
+          <FormInput
             name="password"
             type="password"
             placeholder="* * * *"
@@ -81,7 +75,7 @@ export const UserAuthForm: React.FC<IUserAuthForm> = ({
 
     return (
       <>
-        <AuthInput
+        <FormInput
           name="name"
           type="text"
           placeholder="aniket"
@@ -91,7 +85,7 @@ export const UserAuthForm: React.FC<IUserAuthForm> = ({
             (errors["name"] && touched["name"] && errors["name"]) || ""
           }
         />
-        <AuthInput
+        <FormInput
           name="email"
           type="email"
           placeholder="aniket.chanana@velotio.com"
@@ -101,7 +95,7 @@ export const UserAuthForm: React.FC<IUserAuthForm> = ({
             (errors["email"] && touched["email"] && errors["email"]) || ""
           }
         />
-        <AuthInput
+        <FormInput
           name="password"
           type="password"
           placeholder="* * * *"
@@ -112,7 +106,7 @@ export const UserAuthForm: React.FC<IUserAuthForm> = ({
             ""
           }
         />
-        <AuthInput
+        <FormInput
           name="confirmPassword"
           type="password"
           placeholder="* * * *"
@@ -135,12 +129,10 @@ export const UserAuthForm: React.FC<IUserAuthForm> = ({
     try {
       await userAction({ ...values } as any);
       router.push(mainRoutes.root());
-    } catch {
+    } catch (e: any) {
       toast({
-        title: "Something went wrong",
+        ...e.response.data,
         status: "error",
-        duration: 3000,
-        isClosable: true,
       });
     } finally {
       setSubmitting(false);
@@ -163,18 +155,15 @@ export const UserAuthForm: React.FC<IUserAuthForm> = ({
             return (
               <form onSubmit={handleSubmit}>
                 <VStack alignItems={"flex-start"}>
-                  {getFields({ ...rest })}
+                  <VStack gap={2} w="full">
+                    {getFields({ ...rest })}
+                  </VStack>
                   <HStack
                     justifyContent={"space-between"}
                     w="full"
                     alignItems={"center"}
                   >
-                    <Button
-                      type="submit"
-                      isLoading={isSubmitting}
-                      variant={"solid"}
-                      colorScheme="teal"
-                    >
+                    <Button type="submit" isLoading={isSubmitting}>
                       {authType === AuthType.LOGIN ? "Login" : "Signup"}
                     </Button>
                     <Link

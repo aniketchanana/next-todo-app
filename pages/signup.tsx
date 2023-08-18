@@ -1,11 +1,11 @@
 import { UserAuthForm } from "@/components/auth/UserAuthForm";
-import { authApi } from "@/constants/urls";
+import { authEndPoints } from "@/constants/endPoints";
 import {
   AuthType,
   IUserDetails,
   OnUserSignUpAction,
   UserSignUp,
-} from "@/types/common";
+} from "@/types/user.types";
 import { postApi } from "@/utils/api.utils";
 
 const Login = () => {
@@ -14,7 +14,7 @@ const Login = () => {
     password,
     name,
   }: UserSignUp) => {
-    await postApi<IUserDetails>(authApi.signUp, {
+    await postApi<IUserDetails>(authEndPoints.signUp, {
       userDetails: {
         emailId: email,
         password,

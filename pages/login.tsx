@@ -1,11 +1,11 @@
 import { UserAuthForm } from "@/components/auth/UserAuthForm";
-import { authApi } from "@/constants/urls";
+import { authEndPoints } from "@/constants/endPoints";
 import {
   AuthType,
   IUserDetails,
   OnUserLoginAction,
   UserLogin,
-} from "@/types/common";
+} from "@/types/user.types";
 import { postApi } from "@/utils/api.utils";
 import { checkIfUserLoggedInAuthPage } from "@/utils/auth.utils";
 import { GetServerSidePropsContext } from "next/types";
@@ -19,7 +19,7 @@ const Login = () => {
     email,
     password,
   }: UserLogin) => {
-    await postApi<IUserDetails>(authApi.signIn, {
+    await postApi<IUserDetails>(authEndPoints.signIn, {
       emailId: email,
       password,
     });

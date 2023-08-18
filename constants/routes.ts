@@ -3,6 +3,9 @@ export const authRoutes = {
   signup: () => "/signup",
 };
 
+export const todoRoutes = {
+  todo: (listId) => `/todo/${listId}`,
+};
 export const mainRoutes = {
   root: () => "/",
 };

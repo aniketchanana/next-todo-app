@@ -1,5 +1,6 @@
-import { Box, Input } from "@chakra-ui/react";
+import { Box, Input, InputProps } from "@chakra-ui/react";
 import { isEmpty } from "lodash";
+import { FC, useEffect, useRef } from "react";
 
 const RenderError = ({ message = "" }) => {
   return (
@@ -8,24 +9,32 @@ const RenderError = ({ message = "" }) => {
     </Box>
   );
 };
-
-export const AuthInput = ({
-  name,
-  type,
-  errorMessage,
-  handleChange,
-  handleBlur,
-  placeholder,
-}: {
+interface IFormInput {
   name: string;
   type: string;
   placeholder: string;
   errorMessage: string;
   handleChange: React.ChangeEventHandler<HTMLInputElement>;
   handleBlur: React.FocusEventHandler<HTMLInputElement>;
+  onInputRefReady?: (ref: React.RefObject<HTMLInputElement>) => void;
+}
+export const FormInput: FC<InputProps & IFormInput> = ({
+  name,
+  type,
+  errorMessage,
+  handleChange,
+  handleBlur,
+  placeholder,
+  onInputRefReady = null,
 }) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (onInputRefReady && inputRef && inputRef.current) {
+      onInputRefReady(inputRef);
+    }
+  }, [inputRef]);
   return (
-    <Box width={"full"} mb={2}>
+    <>
       <Input
         name={name}
         type={type}
@@ -33,8 +42,9 @@ export const AuthInput = ({
         onBlur={handleBlur}
         placeholder={placeholder}
         width={"full"}
+        ref={inputRef}
       />
       {!isEmpty(errorMessage) && <RenderError message={errorMessage} />}
-    </Box>
+    </>
   );
 };
