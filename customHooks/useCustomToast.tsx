@@ -6,7 +6,11 @@ export const useCustomToast = () => {
   const customToast = (
     values: Omit<UseToastOptions, "duration" | "isClosable">
   ) => {
-    toast({ ...values, duration: 3000, isClosable: true });
+    toast({
+      ...values,
+      duration: 3000,
+      isClosable: true,
+    });
   };
   return customToast;
 };

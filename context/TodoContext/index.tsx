@@ -14,6 +14,7 @@ import { Box, Spinner } from "@chakra-ui/react";
 export const initialState: ITodoStateContext = {
   allTodoLists: [],
   isAllTodoListLoading: false,
+  selectedTodoListItems: [],
 };
 
 export const TodoStateContext = createContext<ITodoStateContext>(initialState);

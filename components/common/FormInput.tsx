@@ -1,12 +1,12 @@
-import { Box, Input, InputProps } from "@chakra-ui/react";
+import { Box, Input, InputProps, Text } from "@chakra-ui/react";
 import { isEmpty } from "lodash";
 import { FC, useEffect, useRef } from "react";
 
 const RenderError = ({ message = "" }) => {
   return (
-    <Box color={"red"} mt={1}>
+    <Text fontSize={"small"} color={"red.500"} mt={1}>
       {message}
-    </Box>
+    </Text>
   );
 };
 interface IFormInput {
@@ -33,9 +33,9 @@ export const FormInput: FC<InputProps & IFormInput> = ({
     if (onInputRefReady && inputRef && inputRef.current) {
       onInputRefReady(inputRef);
     }
-  }, [inputRef]);
+  }, [inputRef, onInputRefReady]);
   return (
-    <>
+    <Box w="full">
       <Input
         name={name}
         type={type}
@@ -47,6 +47,6 @@ export const FormInput: FC<InputProps & IFormInput> = ({
         {...rest}
       />
       {!isEmpty(errorMessage) && <RenderError message={errorMessage} />}
-    </>
+    </Box>
   );
 };

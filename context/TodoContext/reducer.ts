@@ -35,6 +35,29 @@ export const todoContextReducer: React.Reducer<
       );
       return updatedState;
     }
+    case TodoActions.DELETE_TODO_LIST: {
+      const { todoListId } = action.payload;
+      const updatedState = cloneDeep(state);
+      updatedState.allTodoLists = updatedState.allTodoLists.filter(
+        ({ uuid: listId }) => todoListId !== listId
+      );
+      return updatedState;
+    }
+    case TodoActions.ADD_NEW_TODO_ITEM: {
+      const { todoItem } = action.payload;
+      const updatedState = cloneDeep(state);
+      updatedState.selectedTodoListItems = [
+        ...updatedState.selectedTodoListItems,
+        todoItem,
+      ];
+      return updatedState;
+    }
+    case TodoActions.SET_ALL_TODO_ITEMS: {
+      const { todoItems } = action.payload;
+      const updatedState = cloneDeep(state);
+      updatedState.selectedTodoListItems = [...todoItems];
+      return updatedState;
+    }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
     }

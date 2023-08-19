@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { Formik } from "formik";
 import { useRouter } from "next/router";
-import { FC, useMemo, useState } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import { FormInput } from "../common/FormInput";
 import { Button } from "../common/Button";
 import { createTodoList, updateTodoList } from "@/api/todo.apisCalls";
@@ -41,6 +41,13 @@ interface ITodoListAddAndUpdateModal {
   selectedListId?: string;
 }
 
+const validateTodoListName = (values: ICreateNewTodoListForm) => {
+  let errors = {} as ICreateNewTodoListForm;
+  if (!values[FormItemName.TODO_LIST_NAME]) {
+    errors[FormItemName.TODO_LIST_NAME] = "Please enter list name!";
+  }
+  return errors;
+};
 const TodoListAddAndUpdateModal: FC<ITodoListAddAndUpdateModal> = ({
   isModalOpen,
   closeModal,
@@ -54,15 +61,8 @@ const TodoListAddAndUpdateModal: FC<ITodoListAddAndUpdateModal> = ({
     return allTodoLists.find(
       (listDetails) => listDetails.uuid === selectedListId
     );
-  }, [allTodoLists]);
+  }, [allTodoLists, selectedListId]);
   const toast = useCustomToast();
-  const validateTodoListName = (values: ICreateNewTodoListForm) => {
-    let errors = {} as ICreateNewTodoListForm;
-    if (!values[FormItemName.TODO_LIST_NAME]) {
-      errors[FormItemName.TODO_LIST_NAME] = "Please enter list name!";
-    }
-    return errors;
-  };
 
   const onCreateTodoList = async (
     values: ICreateNewTodoListForm,
@@ -138,6 +138,9 @@ const TodoListAddAndUpdateModal: FC<ITodoListAddAndUpdateModal> = ({
       btnText: "Update",
     },
   };
+  const onInputRefReady = useCallback((ref) => {
+    ref?.current?.focus();
+  }, []);
 
   return (
     <Modal isOpen={isModalOpen} onClose={closeModal}>
@@ -166,9 +169,7 @@ const TodoListAddAndUpdateModal: FC<ITodoListAddAndUpdateModal> = ({
                 <ModalBody>
                   <FormInput
                     defaultValue={initialValues[FormItemName.TODO_LIST_NAME]}
-                    onInputRefReady={(ref) => {
-                      ref.current?.focus();
-                    }}
+                    onInputRefReady={onInputRefReady}
                     name={FormItemName.TODO_LIST_NAME}
                     type="text"
                     placeholder="Grocery list"

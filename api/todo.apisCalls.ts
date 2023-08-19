@@ -6,7 +6,7 @@ import {
   IFetchTodoListResponse,
   IUpdateListResponse,
 } from "@/types/todo.types";
-import { getApi, patchApi, postApi } from "@/utils/api.utils";
+import { deleteApi, getApi, patchApi, postApi } from "@/utils/api.utils";
 
 export const fetchTodoList = async (
   token?: string,
@@ -32,10 +32,10 @@ export const fetchTodoList = async (
   }
 };
 
-export const fetchAllTodoItems = async (listId: string, token: string) => {
+export const fetchAllTodoItems = async (todoListId: string, token: string) => {
   try {
     const res = await getApi<IFetchTodoListItems>(
-      `${todoEndpoints.getUserTodoItem}?listId=${listId}`,
+      `${todoEndpoints.getUserTodoItem}?listId=${todoListId}`,
       { token }
     );
     return res.data;
@@ -49,11 +49,25 @@ export const createTodoList = (listName) => {
     listName,
   });
 };
-export const updateTodoList = (listId, updateName) => {
+export const updateTodoList = (todoListId, updateName) => {
   return patchApi<IUpdateListResponse>(todoEndpoints.updateTodoList, {
-    listId: listId,
+    listId: todoListId,
     updates: {
       name: updateName,
     },
   });
+};
+export const deleteTodoList = (todoListId) => {
+  return deleteApi<IUpdateListResponse>(todoEndpoints.deleteTodoList, {
+    listId: todoListId,
+  });
+};
+export const createNewTodoItem = (todoListId: string, text: string) => {
+  return postApi<{ text: string; listId: string }>(
+    todoEndpoints.createTodoItem,
+    {
+      text,
+      listId: todoListId,
+    }
+  );
 };

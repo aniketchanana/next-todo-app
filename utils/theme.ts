@@ -38,6 +38,8 @@ export const spacing = {
     18: "72px",
     19: "76px",
     20: "80px",
+    30: "120px",
+    40: "160px",
   },
 };
 const theme = extendTheme({ config, breakpoints, ...spacing });

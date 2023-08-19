@@ -15,6 +15,7 @@ export const LeftSidebar: FC<ILeftSidebarProps> = ({ allTodoList }) => {
       display={"flex"}
       justifyContent={"center"}
       position={"relative"}
+      background={"whitesmoke"}
     >
       <Box
         height={"calc(95% - 16px)"}
@@ -22,7 +23,7 @@ export const LeftSidebar: FC<ILeftSidebarProps> = ({ allTodoList }) => {
         top={"0"}
         width={"100%"}
       >
-        <TodoListView allTodoList={allTodoList} />
+        <TodoListView />
       </Box>
       <Box
         position={"absolute"}

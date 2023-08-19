@@ -3,6 +3,12 @@ export enum TodoActions {
   SET_TODO_LISTS_LOADING = "SET_TODO_LISTS_LOADING",
   ADD_NEW_LIST = "ADD_NEW_LIST",
   UPDATE_TODO_DETAILS = "UPDATE_TODO_DETAILS",
+  DELETE_TODO_LIST = "DELETE_TODO_LIST",
+
+  ADD_NEW_TODO_ITEM = "ADD_NEW_TODO_ITEM",
+  UPDATE_TODO_ITEM = "UPDATE_TODO_ITEM",
+  DELETE_TODO_ITEM = "DELETE_TODO_ITEM",
+  SET_ALL_TODO_ITEMS = "SET_ALL_TODO_ITEMS",
 }
 
 export interface TodoActionType {
@@ -19,10 +25,20 @@ export interface ITodoList {
   createdAt: Date;
 }
 
-export interface ITodoItem {}
+export interface ITodoItem {
+  uuid: string;
+  text: string;
+  isDeleted: boolean;
+  isChecked: boolean;
+  todoListId: string;
+  userId: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 export interface ITodoStateContext {
   allTodoLists: ITodoList[];
   isAllTodoListLoading: boolean;
+  selectedTodoListItems: ITodoItem[];
 }
 
 export type ITodoDispatchContext = (action: TodoActionType) => void;
