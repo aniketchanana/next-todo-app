@@ -9,6 +9,7 @@ export enum TodoActions {
   UPDATE_TODO_ITEM = "UPDATE_TODO_ITEM",
   DELETE_TODO_ITEM = "DELETE_TODO_ITEM",
   SET_ALL_TODO_ITEMS = "SET_ALL_TODO_ITEMS",
+  SET_ALL_TODO_ITEMS_LOADING = "SET_ALL_TODO_ITEMS_LOADING",
 }
 
 export interface TodoActionType {
@@ -39,6 +40,7 @@ export interface ITodoStateContext {
   allTodoLists: ITodoList[];
   isAllTodoListLoading: boolean;
   selectedTodoListItems: ITodoItem[];
+  isAllTodoItemsLoading: boolean;
 }
 
 export type ITodoDispatchContext = (action: TodoActionType) => void;

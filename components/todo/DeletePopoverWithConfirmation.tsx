@@ -10,7 +10,7 @@ import {
   PopoverTrigger,
   Text,
 } from "@chakra-ui/react";
-import { FC, useMemo, useRef } from "react";
+import { FC, useMemo } from "react";
 import { ActionIconContainer } from "./ActionItemContainer";
 import { DeleteLineIcon } from "../common/Icons";
 import { Button } from "../common/Button";

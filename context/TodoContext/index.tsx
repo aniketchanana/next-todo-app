@@ -15,6 +15,7 @@ export const initialState: ITodoStateContext = {
   allTodoLists: [],
   isAllTodoListLoading: false,
   selectedTodoListItems: [],
+  isAllTodoItemsLoading: true,
 };
 
 export const TodoStateContext = createContext<ITodoStateContext>(initialState);

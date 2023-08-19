@@ -3,7 +3,10 @@ import { LeftSidebar } from "@/components/todo/LeftSidebar";
 import { RightSideSection } from "@/components/todo/RightSideSection";
 import { mainRoutes } from "@/constants/routes";
 import { TodoProvider } from "@/context/TodoContext";
-import { setAllTodoItems } from "@/context/TodoContext/actions";
+import {
+  setAllTodoItemLoading,
+  setAllTodoItems,
+} from "@/context/TodoContext/actions";
 import { useTodoDispatchContext } from "@/context/TodoContext/useTodoDispatchContext";
 import { ITodoItem, ITodoList } from "@/types/todo.types";
 import { checkIfUserLoggedInInternalPage } from "@/utils/auth.utils";
@@ -50,7 +53,9 @@ const TodoList: NextPage<ITodoListProps> = ({
 }) => {
   const todoDispatch = useTodoDispatchContext();
   useEffect(() => {
+    todoDispatch(setAllTodoItemLoading(true));
     todoDispatch(setAllTodoItems(selectedTodoListItems));
+    todoDispatch(setAllTodoItemLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTodoListItems]);
   return (

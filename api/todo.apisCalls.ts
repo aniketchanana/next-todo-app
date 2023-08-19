@@ -71,3 +71,9 @@ export const createNewTodoItem = (todoListId: string, text: string) => {
     }
   );
 };
+export const deleteTodoItem = (todoListId: string, todoItemId: string) => {
+  return deleteApi(todoEndpoints.deleteTodoItem, {
+    listId: todoListId,
+    todoId: todoItemId,
+  });
+};

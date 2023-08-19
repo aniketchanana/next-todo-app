@@ -31,3 +31,21 @@ export const setAllTodoItems = (todoItems: ITodoItem[]) => ({
   type: TodoActions.SET_ALL_TODO_ITEMS,
   payload: { todoItems },
 });
+export const setAllTodoItemLoading = (isLoading: boolean) => ({
+  type: TodoActions.SET_ALL_TODO_ITEMS_LOADING,
+  payload: { isLoading },
+});
+export const deleteTodoItemAction = (todoItemId: string) => ({
+  type: TodoActions.DELETE_TODO_ITEM,
+  payload: { todoItemId },
+});
+export const updateTodoItemAction = (
+  todoItemId: string,
+  updates: Pick<ITodoItem, "isChecked" | "text">
+) => ({
+  type: TodoActions.UPDATE_TODO_ITEM,
+  payload: {
+    updates,
+    todoItemId,
+  },
+});
