@@ -13,7 +13,7 @@ import { Box, Spinner } from "@chakra-ui/react";
 
 export const initialState: ITodoStateContext = {
   allTodoLists: [],
-  isAllTodoListLoading: false,
+  isAllTodoListLoading: true,
   selectedTodoListItems: [],
   isAllTodoItemsLoading: true,
 };
@@ -34,20 +34,15 @@ export const TodoProvider: FC<ITodoContextProvider> = ({ children }) => {
         dispatch(setTodoLists(allTodoList));
       } catch {
         dispatch(setTodoLists([]));
+      } finally {
+        dispatch(setTodoListsLoading(false));
       }
-      dispatch(setTodoListsLoading(false));
     })();
   }, []);
   return (
     <TodoStateContext.Provider value={state}>
       <TodoDispatchContext.Provider value={dispatch}>
-        {state.isAllTodoListLoading ? (
-          <Box className="flex w-full h-full items-center justify-center">
-            <Spinner />
-          </Box>
-        ) : (
-          children
-        )}
+        {children}
       </TodoDispatchContext.Provider>
     </TodoStateContext.Provider>
   );

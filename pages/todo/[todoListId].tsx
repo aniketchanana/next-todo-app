@@ -8,6 +8,7 @@ import {
   setAllTodoItems,
 } from "@/context/TodoContext/actions";
 import { useTodoDispatchContext } from "@/context/TodoContext/useTodoDispatchContext";
+import { useTodoStateContext } from "@/context/TodoContext/useTodoStateContext";
 import { ITodoItem, ITodoList } from "@/types/todo.types";
 import { checkIfUserLoggedInInternalPage } from "@/utils/auth.utils";
 import { Box, Grid, GridItem } from "@chakra-ui/react";
@@ -25,6 +26,7 @@ interface ITodoListProps {
 }
 const TodoList: NextPage<ITodoListProps> = ({ allTodoList }) => {
   const todoDispatch = useTodoDispatchContext();
+  const { isAllTodoListLoading } = useTodoStateContext();
   const router = useRouter();
   const selectedTodoListId = router.query.todoListId as string;
 
@@ -50,7 +52,7 @@ const TodoList: NextPage<ITodoListProps> = ({ allTodoList }) => {
     <Box width={"full"} h={"full"}>
       <Grid h="full" templateColumns="1fr 4fr">
         <GridItem>
-          <LeftSidebar allTodoList={allTodoList} />
+          {!isAllTodoListLoading && <LeftSidebar allTodoList={allTodoList} />}
         </GridItem>
         <GridItem>
           <RightSideSection />

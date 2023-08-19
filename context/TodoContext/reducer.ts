@@ -9,6 +9,7 @@ export const todoContextReducer: React.Reducer<
   ITodoStateContext,
   TodoActionType
 > = (state: ITodoStateContext, action: TodoActionType): ITodoStateContext => {
+  console.log(action);
   switch (action.type) {
     case TodoActions.SET_TODO_LISTS: {
       return { ...state, allTodoLists: action.payload };
