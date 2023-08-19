@@ -9,7 +9,6 @@ export const todoContextReducer: React.Reducer<
   ITodoStateContext,
   TodoActionType
 > = (state: ITodoStateContext, action: TodoActionType): ITodoStateContext => {
-  console.log(action);
   switch (action.type) {
     case TodoActions.SET_TODO_LISTS: {
       return { ...state, allTodoLists: action.payload };
@@ -46,38 +45,48 @@ export const todoContextReducer: React.Reducer<
     }
     case TodoActions.ADD_NEW_TODO_ITEM: {
       const { todoItem } = action.payload;
-      state.selectedTodoListItems = [...state.selectedTodoListItems, todoItem];
-      return state;
+      const updatedState = cloneDeep(state);
+      updatedState.selectedTodoListItems = [
+        ...updatedState.selectedTodoListItems,
+        todoItem,
+      ];
+      return updatedState;
     }
     case TodoActions.SET_ALL_TODO_ITEMS: {
       const { todoItems } = action.payload;
-      state.selectedTodoListItems = todoItems;
-      return state;
+      const updatedState = cloneDeep(state);
+      updatedState.selectedTodoListItems = [...todoItems];
+      return updatedState;
     }
     case TodoActions.DELETE_TODO_ITEM: {
+      const updatedState = cloneDeep(state);
       const { todoItemId } = action.payload;
-      state.selectedTodoListItems = state.selectedTodoListItems.filter(
-        (item) => item.uuid !== todoItemId
-      );
-      return state;
+      updatedState.selectedTodoListItems =
+        updatedState.selectedTodoListItems.filter(
+          (item) => item.uuid !== todoItemId
+        );
+      return updatedState;
     }
     case TodoActions.UPDATE_TODO_ITEM: {
       const { updates, todoItemId } = action.payload;
-      state.selectedTodoListItems = state.selectedTodoListItems.map((item) => {
-        if (item.uuid === todoItemId) {
-          return {
-            ...item,
-            ...updates,
-          };
-        }
-        return item;
-      });
-      return state;
+      const updatedState = cloneDeep(state);
+      updatedState.selectedTodoListItems =
+        updatedState.selectedTodoListItems.map((item) => {
+          if (item.uuid === todoItemId) {
+            return {
+              ...item,
+              ...updates,
+            };
+          }
+          return item;
+        });
+      return updatedState;
     }
     case TodoActions.SET_ALL_TODO_ITEMS_LOADING: {
+      const updatedState = cloneDeep(state);
       const { isLoading } = action.payload;
-      state.isAllTodoItemsLoading = isLoading;
-      return state;
+      updatedState.isAllTodoItemsLoading = isLoading;
+      return updatedState;
     }
     default: {
       throw new Error(`Unhandled action type: ${action.type}`);
