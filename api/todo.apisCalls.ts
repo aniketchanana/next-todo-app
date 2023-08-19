@@ -32,11 +32,15 @@ export const fetchTodoList = async (
   }
 };
 
-export const fetchAllTodoItems = async (todoListId: string, token: string) => {
+export const fetchAllTodoItems = async (todoListId: string, token?: string) => {
+  const headers: GenericObject = {};
+  if (token) {
+    headers.token = token;
+  }
   try {
     const res = await getApi<IFetchTodoListItems>(
       `${todoEndpoints.getUserTodoItem}?listId=${todoListId}`,
-      { token }
+      headers
     );
     return res.data;
   } catch (e) {
