@@ -23,7 +23,26 @@ export const TodoItemsList: FC = () => {
   if (todoItems.length === 0) {
     return <EmptyTodoItemState />;
   }
-  const sortedTodoItems = todoItems.sort((item) => (item.isChecked ? 1 : -1));
+  const sortedTodoItems = todoItems.sort((item2, item1) => {
+    if (item2.isChecked && !item1.isChecked) {
+      return 1;
+    }
+    if (
+      item2.isChecked &&
+      item1.isChecked &&
+      new Date(item1.createdAt) < new Date(item2.createdAt)
+    ) {
+      return 1;
+    }
+    if (
+      !item2.isChecked &&
+      !item1.isChecked &&
+      new Date(item1.createdAt) < new Date(item2.createdAt)
+    ) {
+      return 1;
+    }
+    return -1;
+  });
   return (
     <VStack gap={4} alignItems={"flex-start"}>
       {sortedTodoItems.map((todoItemDetails) => (
