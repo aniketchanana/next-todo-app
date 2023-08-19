@@ -81,9 +81,9 @@ export const TodoItemView: FC<ITodoItem> = ({
       <HStack gap={2} alignItems={"flex-start"} w="full">
         <Checkbox
           colorScheme="gray"
-          defaultChecked={isChecked}
+          isChecked={isChecked}
           mt={"5px"}
-          onChange={isChecked ? markTodoItem : unMarkTodoItem}
+          onChange={isChecked ? unMarkTodoItem : markTodoItem}
         />
 
         <Box
