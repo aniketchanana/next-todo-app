@@ -45,42 +45,33 @@ export const todoContextReducer: React.Reducer<
     }
     case TodoActions.ADD_NEW_TODO_ITEM: {
       const { todoItem } = action.payload;
-      const updatedState = cloneDeep(state);
-      updatedState.selectedTodoListItems = [
-        ...updatedState.selectedTodoListItems,
-        todoItem,
-      ];
-      return updatedState;
+      state.selectedTodoListItems = [...state.selectedTodoListItems, todoItem];
+      return state;
     }
     case TodoActions.SET_ALL_TODO_ITEMS: {
       const { todoItems } = action.payload;
-      const updatedState = cloneDeep(state);
-      updatedState.selectedTodoListItems = [...todoItems];
-      return updatedState;
+      state.selectedTodoListItems = todoItems;
+      return state;
     }
     case TodoActions.DELETE_TODO_ITEM: {
-      const updatedState = cloneDeep(state);
       const { todoItemId } = action.payload;
-      updatedState.selectedTodoListItems =
-        updatedState.selectedTodoListItems.filter(
-          (item) => item.uuid !== todoItemId
-        );
-      return updatedState;
+      state.selectedTodoListItems = state.selectedTodoListItems.filter(
+        (item) => item.uuid !== todoItemId
+      );
+      return state;
     }
     case TodoActions.UPDATE_TODO_ITEM: {
       const { updates, todoItemId } = action.payload;
-      const updatedState = cloneDeep(state);
-      updatedState.selectedTodoListItems =
-        updatedState.selectedTodoListItems.map((item) => {
-          if (item.uuid === todoItemId) {
-            return {
-              ...item,
-              ...updates,
-            };
-          }
-          return item;
-        });
-      return updatedState;
+      state.selectedTodoListItems = state.selectedTodoListItems.map((item) => {
+        if (item.uuid === todoItemId) {
+          return {
+            ...item,
+            ...updates,
+          };
+        }
+        return item;
+      });
+      return state;
     }
     case TodoActions.SET_ALL_TODO_ITEMS_LOADING: {
       const { isLoading } = action.payload;

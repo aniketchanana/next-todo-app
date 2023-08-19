@@ -11,7 +11,7 @@ import {
   deleteTodoItemAction,
   updateTodoItemAction,
 } from "@/context/TodoContext/actions";
-import { isEqual } from "lodash";
+import { isEmpty, isEqual } from "lodash";
 
 interface ITodoItemProps extends ITodoItem {}
 export const TodoItemView: FC<ITodoItem> = ({
@@ -39,7 +39,7 @@ export const TodoItemView: FC<ITodoItem> = ({
     const text = e.clipboardData.getData("text/plain");
     document.execCommand("insertText", false, text);
   };
-  const deleteTodoItemClick = async () => {
+  const deleteTodoItemHandler = async () => {
     try {
       await deleteTodoItem(todoListId, todoItemId);
       todoDispatch(deleteTodoItemAction(todoItemId));
@@ -85,6 +85,9 @@ export const TodoItemView: FC<ITodoItem> = ({
   };
   const handleTextInputBlur = (e: any) => {
     const updatedText = e.target.innerText;
+    if (isEmpty(updatedText)) {
+      deleteTodoItemHandler();
+    }
     if (!isEqual(updatedText, text)) {
       updateTodoItemText(updatedText);
     }
@@ -97,7 +100,7 @@ export const TodoItemView: FC<ITodoItem> = ({
       background={"whitesmoke"}
       w="full"
       justifyContent={"space-between"}
-      alignItems={"center"}
+      alignItems={"flex-start"}
       rounded={"base"}
     >
       <HStack gap={2} alignItems={"flex-start"} w="full">
@@ -121,7 +124,7 @@ export const TodoItemView: FC<ITodoItem> = ({
           {text}
         </Box>
       </HStack>
-      <ActionIconContainer iconColor={"red"} onClick={deleteTodoItemClick}>
+      <ActionIconContainer iconColor={"red"} onClick={deleteTodoItemHandler}>
         <DeleteLineIcon />
       </ActionIconContainer>
     </HStack>

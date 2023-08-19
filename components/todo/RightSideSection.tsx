@@ -2,7 +2,7 @@ import { Box, Input } from "@chakra-ui/react";
 import { AddTodoInput } from "./AddTodoItemInput";
 import { useTodoStateContext } from "@/context/TodoContext/useTodoStateContext";
 import { TodoItemsList } from "./TodoItemsView/TodoItemsList";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 export const RightSideSection = () => {
   const listRef = useRef<any>();
