@@ -68,6 +68,9 @@ export const TodoItemView: FC<ITodoItem> = ({
   const unMarkTodoItem = async () => {
     await updateTodoItem({ isChecked: false });
   };
+  const updateTodoItemText = async (updatedText) => {
+    await updateTodoItem({ text: updatedText });
+  };
   return (
     <HStack
       p={4}
@@ -87,11 +90,12 @@ export const TodoItemView: FC<ITodoItem> = ({
         />
 
         <Box
-          contentEditable={true}
+          contentEditable={!isChecked}
           w="full"
           border={"none"}
           onPaste={handlePaste}
           textDecoration={isChecked ? "line-through" : ""}
+          onBlur={(e: any) => updateTodoItemText(e.target.innerText)}
         >
           {text}
         </Box>
