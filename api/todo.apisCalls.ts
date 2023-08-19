@@ -4,6 +4,7 @@ import {
   ICreateListResponse,
   IFetchTodoListItems,
   IFetchTodoListResponse,
+  ITodoItem,
   IUpdateListResponse,
 } from "@/types/todo.types";
 import { deleteApi, getApi, patchApi, postApi } from "@/utils/api.utils";
@@ -79,5 +80,17 @@ export const deleteTodoItem = (todoListId: string, todoItemId: string) => {
   return deleteApi(todoEndpoints.deleteTodoItem, {
     listId: todoListId,
     todoId: todoItemId,
+  });
+};
+
+export const updateTodoItemApi = (
+  todoListId: string,
+  todoItemId: string,
+  updates: Partial<Pick<ITodoItem, "isChecked" | "text">>
+) => {
+  return patchApi(todoEndpoints.updateTodoItem, {
+    listId: todoListId,
+    todoId: todoItemId,
+    updates,
   });
 };

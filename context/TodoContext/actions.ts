@@ -41,7 +41,7 @@ export const deleteTodoItemAction = (todoItemId: string) => ({
 });
 export const updateTodoItemAction = (
   todoItemId: string,
-  updates: Pick<ITodoItem, "isChecked" | "text">
+  updates: Partial<Pick<ITodoItem, "isChecked" | "text">>
 ) => ({
   type: TodoActions.UPDATE_TODO_ITEM,
   payload: {

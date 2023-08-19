@@ -3,11 +3,14 @@ import { ITodoItem } from "@/types/todo.types";
 import { Box, Checkbox, HStack } from "@chakra-ui/react";
 import { FC } from "react";
 import { ActionIconContainer } from "../ActionItemContainer";
-import { deleteTodoItem } from "@/api/todo.apisCalls";
+import { deleteTodoItem, updateTodoItemApi } from "@/api/todo.apisCalls";
 import { useRouter } from "next/router";
 import { useCustomToast } from "@/customHooks/useCustomToast";
 import { useTodoDispatchContext } from "@/context/TodoContext/useTodoDispatchContext";
-import { deleteTodoItemAction } from "@/context/TodoContext/actions";
+import {
+  deleteTodoItemAction,
+  updateTodoItemAction,
+} from "@/context/TodoContext/actions";
 
 interface ITodoItemProps extends ITodoItem {}
 export const TodoItemView: FC<ITodoItem> = ({
@@ -18,6 +21,8 @@ export const TodoItemView: FC<ITodoItem> = ({
   const router = useRouter();
   const toast = useCustomToast();
   const todoDispatch = useTodoDispatchContext();
+  const todoListId = router.query.todoListId as string;
+
   const handlePaste = (e: any) => {
     e.preventDefault();
 
@@ -26,7 +31,6 @@ export const TodoItemView: FC<ITodoItem> = ({
   };
   const deleteTodoItemClick = async () => {
     try {
-      const todoListId = router.query.todoListId as string;
       await deleteTodoItem(todoListId, todoItemId);
       todoDispatch(deleteTodoItemAction(todoItemId));
       toast({
@@ -40,7 +44,30 @@ export const TodoItemView: FC<ITodoItem> = ({
       });
     }
   };
-  const updateTodoItem = (todoId: string) => {};
+
+  const updateTodoItem = async (
+    updates: Partial<Pick<ITodoItem, "isChecked" | "text">>
+  ) => {
+    try {
+      await updateTodoItemApi(todoListId, todoItemId, updates);
+      todoDispatch(updateTodoItemAction(todoItemId, updates));
+      toast({
+        status: "success",
+        title: "Updated todo",
+      });
+    } catch (e: any) {
+      toast({
+        status: "error",
+        ...e.response.data,
+      });
+    }
+  };
+  const markTodoItem = async () => {
+    await updateTodoItem({ isChecked: true });
+  };
+  const unMarkTodoItem = async () => {
+    await updateTodoItem({ isChecked: false });
+  };
   return (
     <HStack
       p={4}
@@ -52,13 +79,19 @@ export const TodoItemView: FC<ITodoItem> = ({
       rounded={"base"}
     >
       <HStack gap={2} alignItems={"flex-start"} w="full">
-        <Checkbox colorScheme="gray" defaultChecked={isChecked} mt={"5px"} />
+        <Checkbox
+          colorScheme="gray"
+          defaultChecked={isChecked}
+          mt={"5px"}
+          onChange={isChecked ? markTodoItem : unMarkTodoItem}
+        />
 
         <Box
           contentEditable={true}
           w="full"
           border={"none"}
           onPaste={handlePaste}
+          textDecoration={isChecked ? "line-through" : ""}
         >
           {text}
         </Box>
