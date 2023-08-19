@@ -1,7 +1,7 @@
 import { DeleteLineIcon } from "@/components/common/Icons";
 import { ITodoItem } from "@/types/todo.types";
-import { Box, Checkbox, HStack } from "@chakra-ui/react";
-import { FC } from "react";
+import { Box, Checkbox, HStack, useOutsideClick } from "@chakra-ui/react";
+import { FC, useRef, useState } from "react";
 import { ActionIconContainer } from "../ActionItemContainer";
 import { deleteTodoItem, updateTodoItemApi } from "@/api/todo.apisCalls";
 import { useRouter } from "next/router";
@@ -11,6 +11,7 @@ import {
   deleteTodoItemAction,
   updateTodoItemAction,
 } from "@/context/TodoContext/actions";
+import { isEqual } from "lodash";
 
 interface ITodoItemProps extends ITodoItem {}
 export const TodoItemView: FC<ITodoItem> = ({
@@ -22,7 +23,16 @@ export const TodoItemView: FC<ITodoItem> = ({
   const toast = useCustomToast();
   const todoDispatch = useTodoDispatchContext();
   const todoListId = router.query.todoListId as string;
+  const divInputRef = useRef<HTMLElement>();
+  const [isEditingMode, setIsEditingMode] = useState(false);
 
+  useOutsideClick({
+    ref: divInputRef as any,
+    handler: () => {
+      divInputRef.current?.blur();
+      setIsEditingMode(false);
+    },
+  });
   const handlePaste = (e: any) => {
     e.preventDefault();
 
@@ -51,10 +61,6 @@ export const TodoItemView: FC<ITodoItem> = ({
     try {
       await updateTodoItemApi(todoListId, todoItemId, updates);
       todoDispatch(updateTodoItemAction(todoItemId, updates));
-      toast({
-        status: "success",
-        title: "Updated todo",
-      });
     } catch (e: any) {
       toast({
         status: "error",
@@ -71,6 +77,19 @@ export const TodoItemView: FC<ITodoItem> = ({
   const updateTodoItemText = async (updatedText) => {
     await updateTodoItem({ text: updatedText });
   };
+  const startEditing = () => {
+    setIsEditingMode(true);
+    setTimeout(() => {
+      divInputRef.current?.focus();
+    }, 0);
+  };
+  const handleTextInputBlur = (e: any) => {
+    const updatedText = e.target.innerText;
+    if (!isEqual(updatedText, text)) {
+      updateTodoItemText(updatedText);
+    }
+  };
+
   return (
     <HStack
       p={4}
@@ -90,12 +109,14 @@ export const TodoItemView: FC<ITodoItem> = ({
         />
 
         <Box
-          contentEditable={!isChecked}
+          contentEditable={!isChecked && isEditingMode}
           w="full"
           border={"none"}
           onPaste={handlePaste}
           textDecoration={isChecked ? "line-through" : ""}
-          onBlur={(e: any) => updateTodoItemText(e.target.innerText)}
+          onBlur={handleTextInputBlur}
+          ref={divInputRef as any}
+          onClick={startEditing}
         >
           {text}
         </Box>

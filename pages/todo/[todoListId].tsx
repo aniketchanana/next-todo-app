@@ -46,33 +46,28 @@ interface ITodoListProps {
   selectedTodoListItems: ITodoItem[];
   allTodoList: ITodoList[];
 }
-const TodoList: NextPage<ITodoListProps> = ({
-  allTodoList,
-  selectedTodoListItems,
-}) => {
+const TodoList: NextPage<ITodoListProps> = ({ allTodoList }) => {
   const todoDispatch = useTodoDispatchContext();
   const router = useRouter();
-  const toast = useCustomToast();
-  const fetchTodoItemsForSelectedList = useCallback(async () => {
-    const selectedTodoListId = router.query.todoListId as string;
-    todoDispatch(setAllTodoItemLoading(true));
-    try {
-      const response = await fetchAllTodoItems(selectedTodoListId);
-      const selectedTodoListItems = get(response, "data.allTodo", []);
-      todoDispatch(setAllTodoItems(selectedTodoListItems));
-    } catch (e: any) {
-      todoDispatch(setAllTodoItems([]));
-      toast({
-        ...e.response.data,
-      });
-    } finally {
-      todoDispatch(setAllTodoItemLoading(false));
-    }
-  }, [router.query.todoListId, toast, todoDispatch]);
+  const selectedTodoListId = router.query.todoListId as string;
 
   useEffect(() => {
-    fetchTodoItemsForSelectedList();
-  }, [fetchTodoItemsForSelectedList, selectedTodoListItems]);
+    (async () => {
+      console.log("i am here");
+      todoDispatch(setAllTodoItemLoading(true));
+      try {
+        const response = await fetchAllTodoItems(selectedTodoListId);
+        const selectedTodoListItems = get(response, "data.allTodo", []);
+        todoDispatch(setAllTodoItems(selectedTodoListItems));
+      } catch (e: any) {
+        router.push(mainRoutes.root());
+        todoDispatch(setAllTodoItems([]));
+      } finally {
+        todoDispatch(setAllTodoItemLoading(false));
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedTodoListId]);
   return (
     <Box width={"full"} h={"full"}>
       <Grid h="full" templateColumns="1fr 4fr">

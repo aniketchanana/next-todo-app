@@ -48,10 +48,6 @@ export const AddTodoInput: FC<{ scrollToLastElement: () => void }> = ({
         throw new Error("Unable to create new list");
       }
 
-      toast({
-        title: "Todo item created",
-        status: "success",
-      });
       todoDispatch(addNewTodoItemAction(todoListId, todoItemDetails));
       setValues({
         [FormItemName.ADD_TODO_ITEM_INPUT]: "",

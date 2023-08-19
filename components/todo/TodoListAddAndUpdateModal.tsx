@@ -79,10 +79,7 @@ const TodoListAddAndUpdateModal: FC<ITodoListAddAndUpdateModal> = ({
         throw new Error("Unable to create new list");
       }
       const newListId = get(listDetails, "uuid", "");
-      toast({
-        title: "Successfully created todo list",
-        status: "success",
-      });
+
       router.push(todoRoutes.todo(newListId));
       todoDispatch(addNewTodoList(listDetails));
     } catch (e: any) {
@@ -103,10 +100,7 @@ const TodoListAddAndUpdateModal: FC<ITodoListAddAndUpdateModal> = ({
     try {
       const updatedName = values.todoListName.trim();
       await updateTodoList(selectedListId, updatedName);
-      toast({
-        title: "Successfully updated todo list",
-        status: "success",
-      });
+
       todoDispatch(updateTodoListAction(selectedListId, updatedName));
     } catch (e: any) {
       toast({
