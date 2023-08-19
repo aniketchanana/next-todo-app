@@ -43,10 +43,10 @@ export const TodoItemView: FC<ITodoItem> = ({
     try {
       await deleteTodoItem(todoListId, todoItemId);
       todoDispatch(deleteTodoItemAction(todoItemId));
-      toast({
-        status: "success",
-        title: "Delete todo item",
-      });
+      // toast({
+      //   status: "success",
+      //   title: "Delete todo item",
+      // });
     } catch (e) {
       toast({
         status: "error",

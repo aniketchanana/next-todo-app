@@ -45,10 +45,10 @@ export const DeletePopoverWithConfirmation: FC<{ todoListId: string }> = ({
         router.push(todoRoutes.todo(firstTodoList.uuid));
       }
       todoDispatch(deleteTodoListAction(todoListId));
-      toast({
-        title: `${currTodoList?.name} deleted`,
-        status: "success",
-      });
+      // toast({
+      //   title: `${currTodoList?.name} deleted`,
+      //   status: "success",
+      // });
     } catch (e: any) {
       toast({
         ...e.response.data,
