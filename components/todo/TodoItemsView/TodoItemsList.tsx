@@ -23,9 +23,10 @@ export const TodoItemsList: FC = () => {
   if (todoItems.length === 0) {
     return <EmptyTodoItemState />;
   }
+  const sortedTodoItems = todoItems.sort((item) => (item.isChecked ? 1 : -1));
   return (
     <VStack gap={4} alignItems={"flex-start"}>
-      {todoItems.map((todoItemDetails) => (
+      {sortedTodoItems.map((todoItemDetails) => (
         <TodoItemView key={todoItemDetails.uuid} {...todoItemDetails} />
       ))}
     </VStack>

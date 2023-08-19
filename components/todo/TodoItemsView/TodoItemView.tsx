@@ -14,7 +14,7 @@ import {
 import { isEmpty, isEqual } from "lodash";
 
 interface ITodoItemProps extends ITodoItem {}
-export const TodoItemView: FC<ITodoItem> = ({
+export const TodoItemView: FC<ITodoItemProps> = ({
   isChecked,
   text,
   uuid: todoItemId,
