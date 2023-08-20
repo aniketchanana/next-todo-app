@@ -18,7 +18,10 @@ import { useTodoStateContext } from "@/context/TodoContext/useTodoStateContext";
 import { useCustomToast } from "@/customHooks/useCustomToast";
 import { deleteTodoList } from "@/api/todo.apisCalls";
 import { useTodoDispatchContext } from "@/context/TodoContext/useTodoDispatchContext";
-import { deleteTodoListAction } from "@/context/TodoContext/actions";
+import {
+  deleteTodoListAction,
+  setTodoLists,
+} from "@/context/TodoContext/actions";
 import { useRouter } from "next/router";
 import { mainRoutes, todoRoutes } from "@/constants/routes";
 
@@ -34,17 +37,16 @@ export const DeletePopoverWithConfirmation: FC<{ todoListId: string }> = ({
   }, [allTodoLists, todoListId]);
   const handleTodoListDeletion = async () => {
     try {
+      const updatedTodoList = allTodoLists.filter(
+        (todoList) => todoList.uuid !== todoListId
+      );
       await deleteTodoList(todoListId);
-      if (allTodoLists.length === 1) {
-        router.push(mainRoutes.root());
-      } else if (
-        allTodoLists.length > 1 &&
-        todoListId === router.query.todoListId
-      ) {
-        const firstTodoList = allTodoLists[1];
-        router.push(todoRoutes.todo(firstTodoList.uuid));
-      }
-      todoDispatch(deleteTodoListAction(todoListId));
+      router.push(
+        updatedTodoList.length > 0
+          ? todoRoutes.todo(updatedTodoList[0].uuid)
+          : mainRoutes.root()
+      );
+      todoDispatch(setTodoLists(updatedTodoList));
       // toast({
       //   title: `${currTodoList?.name} deleted`,
       //   status: "success",
