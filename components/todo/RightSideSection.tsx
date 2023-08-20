@@ -1,8 +1,16 @@
 import { Box, Input } from "@chakra-ui/react";
 import { AddTodoInput } from "./AddTodoItemInput";
-import { useTodoStateContext } from "@/context/TodoContext/useTodoStateContext";
 import { TodoItemsList } from "./TodoItemsView/TodoItemsList";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import { useTodoDispatchContext } from "@/context/TodoContext/useTodoDispatchContext";
+import { useRouter } from "next/router";
+import {
+  setAllTodoItemLoading,
+  setAllTodoItems,
+} from "@/context/TodoContext/actions";
+import { fetchAllTodoItems } from "@/api/todo.apisCalls";
+import { mainRoutes } from "@/constants/routes";
+import { get } from "lodash";
 
 export const RightSideSection = () => {
   const listRef = useRef<any>();
@@ -11,6 +19,27 @@ export const RightSideSection = () => {
       listRef.current.scrollTop += listRef.current?.scrollHeight + 1000;
     }, 100);
   };
+
+  const todoDispatch = useTodoDispatchContext();
+  const router = useRouter();
+  const selectedTodoListId = router.query.todoListId as string;
+
+  useEffect(() => {
+    (async () => {
+      todoDispatch(setAllTodoItemLoading(true));
+      try {
+        const response = await fetchAllTodoItems(selectedTodoListId);
+        const selectedTodoListItems = get(response, "data.allTodo", []);
+        todoDispatch(setAllTodoItems(selectedTodoListItems));
+      } catch (e: any) {
+        router.push(mainRoutes.root());
+        todoDispatch(setAllTodoItems([]));
+      } finally {
+        todoDispatch(setAllTodoItemLoading(false));
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedTodoListId]);
 
   return (
     <Box w="full" h="full" display={"flex"} position={"relative"}>

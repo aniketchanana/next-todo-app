@@ -1,24 +1,16 @@
-import { Box, Spinner, VStack } from "@chakra-ui/react";
+import { Box, VStack } from "@chakra-ui/react";
 import { FC } from "react";
 import { TodoItemView } from "./TodoItemView";
 import { useTodoStateContext } from "@/context/TodoContext/useTodoStateContext";
 import { EmptyTodoItemState } from "./EmptyTodoItemState";
+import { FullScreenSpinner } from "@/components/common/FullScreenSpinner";
 
 export const TodoItemsList: FC = () => {
   const { selectedTodoListItems: todoItems, isAllTodoItemsLoading } =
     useTodoStateContext();
+  console.log("todoItems", todoItems);
   if (isAllTodoItemsLoading) {
-    return (
-      <Box
-        h="full"
-        w="full"
-        display={"flex"}
-        alignItems={"center"}
-        justifyContent={"center"}
-      >
-        <Spinner />
-      </Box>
-    );
+    return <FullScreenSpinner />;
   }
   if (todoItems.length === 0) {
     return <EmptyTodoItemState />;

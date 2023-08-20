@@ -1,13 +1,9 @@
 import { Box } from "@chakra-ui/react";
 import { AddNewTodoListButton } from "./AddNewTodoListButton";
-import { ITodoList } from "@/types/todo.types";
 import { FC } from "react";
 import { TodoListView } from "./TodoListView";
 
-interface ILeftSidebarProps {
-  allTodoList: ITodoList[];
-}
-export const LeftSidebar: FC<ILeftSidebarProps> = ({ allTodoList }) => {
+export const LeftSidebar: FC = () => {
   return (
     <Box
       w="full"

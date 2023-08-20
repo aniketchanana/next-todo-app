@@ -13,9 +13,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <title>Todo application</title>
       </Head>
       <ChakraProvider theme={theme}>
-        <TodoProvider>
-          <Component {...pageProps} />
-        </TodoProvider>
+        <Component {...pageProps} />
       </ChakraProvider>
     </>
   );
