@@ -134,6 +134,7 @@ const TodoListAddAndUpdateModal: FC<ITodoListAddAndUpdateModal> = ({
   };
   const onInputRefReady = useCallback((ref) => {
     ref?.current?.focus();
+    ref?.current?.select();
   }, []);
 
   return (
