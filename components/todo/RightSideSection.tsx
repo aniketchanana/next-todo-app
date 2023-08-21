@@ -1,4 +1,4 @@
-import { Box, Input } from "@chakra-ui/react";
+import { Box, HStack, Input } from "@chakra-ui/react";
 import { AddTodoInput } from "./AddTodoItemInput";
 import { TodoItemsList } from "./TodoItemsView/TodoItemsList";
 import { useEffect, useRef } from "react";
@@ -9,8 +9,12 @@ import {
   setAllTodoItems,
 } from "@/context/TodoContext/actions";
 import { fetchAllTodoItems } from "@/api/todo.apisCalls";
-import { mainRoutes } from "@/constants/routes";
+import { authRoutes, mainRoutes } from "@/constants/routes";
 import { get } from "lodash";
+import { LogoutLineIcon } from "../common/Icons";
+import { useCustomToast } from "@/customHooks/useCustomToast";
+import { logoutUserApi } from "@/api/auth.apiCalls";
+import { ActionIconContainer } from "./ActionItemContainer";
 
 export const RightSideSection = () => {
   const listRef = useRef<any>();
@@ -23,6 +27,7 @@ export const RightSideSection = () => {
   const todoDispatch = useTodoDispatchContext();
   const router = useRouter();
   const selectedTodoListId = router.query.todoListId as string;
+  const toast = useCustomToast();
 
   useEffect(() => {
     (async () => {
@@ -41,17 +46,44 @@ export const RightSideSection = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTodoListId]);
 
+  const logoutUser = async () => {
+    try {
+      await logoutUserApi();
+      router.push(authRoutes.login());
+    } catch (e: any) {
+      toast({
+        ...e.response.data,
+      });
+    }
+  };
+
   return (
-    <Box w="full" h="full" display={"flex"} position={"relative"}>
+    <Box w="full" h="full" position={"relative"}>
+      <HStack
+        fontSize={"2xl"}
+        color={"gray.500"}
+        alignItems={"center"}
+        justifyContent={"flex-end"}
+        px={12}
+        cursor={"pointer"}
+      >
+        <ActionIconContainer
+          onClick={logoutUser}
+          iconColor="gray"
+          label="Logout"
+        >
+          <LogoutLineIcon />
+        </ActionIconContainer>
+      </HStack>
       <Box
         as="div"
         left={0}
-        height={"calc(88% - 32px)"}
+        height={"calc(88% - 40px)"}
         position={"absolute"}
         top={"0"}
         width={"100%"}
         px={40}
-        mt={8}
+        mt={10}
         ref={listRef}
         overflowY={"auto"}
       >

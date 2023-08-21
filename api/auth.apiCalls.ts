@@ -6,7 +6,7 @@ import {
   UserLogin,
   UserSignUp,
 } from "@/types/user.types";
-import { getApi, postApi } from "@/utils/api.utils";
+import { getApi, postApi, putApi } from "@/utils/api.utils";
 
 export const getUserDetails = async (token: string) => {
   const response = await getApi<IUserDetails>(authEndPoints.isValidSession, {
@@ -38,4 +38,8 @@ export const signUpUser: OnUserSignUpAction = async ({
       name,
     },
   });
+};
+
+export const logoutUserApi = async () => {
+  await putApi(authEndPoints.logout);
 };
