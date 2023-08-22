@@ -20,11 +20,18 @@ import { useCustomToast } from "@/customHooks/useCustomToast";
 interface IUserAuthForm {
   authType: AuthType;
   userAction: OnUserLoginAction | OnUserSignUpAction;
+  renderFields: ({
+    handleBlur,
+    handleChange,
+    errors,
+    touched,
+  }) => React.ReactElement;
 }
 
 export const UserAuthForm: React.FC<IUserAuthForm> = ({
   authType,
   userAction,
+  renderFields,
 }) => {
   const toast = useCustomToast();
   const router = useRouter();
@@ -42,86 +49,6 @@ export const UserAuthForm: React.FC<IUserAuthForm> = ({
     },
   };
 
-  const getFields = ({ handleBlur, handleChange, errors, touched }) => {
-    if (authType === AuthType.LOGIN) {
-      return (
-        <>
-          <FormInput
-            name="email"
-            type="email"
-            placeholder="aniket.chanana@velotio.com"
-            handleBlur={handleBlur}
-            handleChange={handleChange}
-            errorMessage={
-              (errors["email"] && touched["email"] && errors["email"]) || ""
-            }
-          />
-          <FormInput
-            name="password"
-            type="password"
-            placeholder="* * * *"
-            handleBlur={handleBlur}
-            handleChange={handleChange}
-            errorMessage={
-              (errors["password"] &&
-                touched["password"] &&
-                errors["password"]) ||
-              ""
-            }
-          />
-        </>
-      );
-    }
-
-    return (
-      <>
-        <FormInput
-          name="name"
-          type="text"
-          placeholder="aniket"
-          handleBlur={handleBlur}
-          handleChange={handleChange}
-          errorMessage={
-            (errors["name"] && touched["name"] && errors["name"]) || ""
-          }
-        />
-        <FormInput
-          name="email"
-          type="email"
-          placeholder="aniket.chanana@velotio.com"
-          handleBlur={handleBlur}
-          handleChange={handleChange}
-          errorMessage={
-            (errors["email"] && touched["email"] && errors["email"]) || ""
-          }
-        />
-        <FormInput
-          name="password"
-          type="password"
-          placeholder="* * * *"
-          handleBlur={handleBlur}
-          handleChange={handleChange}
-          errorMessage={
-            (errors["password"] && touched["password"] && errors["password"]) ||
-            ""
-          }
-        />
-        <FormInput
-          name="confirmPassword"
-          type="password"
-          placeholder="* * * *"
-          handleBlur={handleBlur}
-          handleChange={handleChange}
-          errorMessage={
-            (errors["confirmPassword"] &&
-              touched["confirmPassword"] &&
-              errors["confirmPassword"]) ||
-            ""
-          }
-        />
-      </>
-    );
-  };
   const onFormSubmit = async (
     values: UserLogin | UserSignUp,
     { setSubmitting }
@@ -156,7 +83,7 @@ export const UserAuthForm: React.FC<IUserAuthForm> = ({
               <form onSubmit={handleSubmit}>
                 <VStack alignItems={"flex-start"}>
                   <VStack gap={2} w="full">
-                    {getFields({ ...rest })}
+                    {renderFields({ ...rest })}
                   </VStack>
                   <HStack
                     justifyContent={"space-between"}
