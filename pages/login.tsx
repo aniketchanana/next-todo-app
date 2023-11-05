@@ -15,7 +15,7 @@ const Login = () => {
       {
         name: "email",
         type: "email",
-        placeholder: "aniket.chanana@velotio.com",
+        placeholder: "tonystark@superhero.com",
         handleBlur: handleBlur,
         handleChange: handleChange,
         errorMessage:
